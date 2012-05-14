@@ -1,0 +1,92 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
+<head>
+	<title>untitled</title>
+	<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+    
+    <style type="text/css">
+        #main {
+            border: 1px outset #FAFAFA;
+            background: silver;
+            width:650px;
+            margin: 0 auto;
+            position: relative;
+            padding:25px;
+            text-align: center;
+        }
+        #responseContainer200 {
+            color: green;
+        }
+        #responseContainer404 {
+            color: red;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="main">
+        <h1 id="responseContainer">
+            Something happens... wait 2 sec...
+        </h1>
+        <div id="responseContainer200">
+            This should be change...
+        </div>
+        <br />
+        <div id="responseContainer404">
+            This should be change...
+        </div>
+        <br />
+        <div>
+            <a href="#" id="clickme">Click me!</a>
+        </div>
+    </div>
+</body>
+
+<script type="text/javascript">
+    /**
+    * Callback function
+    * statusCode is used to innerHTML into appropriate div (attr. id)
+    */
+    function callback(JSONObj) {
+        var doc = document.getElementById("responseContainer" + JSONObj.statusCode);
+        if (JSONObj.statusCode == 404) {
+            doc.innerHTML = "<em>Request uri not found!</em>";
+        }
+        else {
+            doc.innerHTML = JSONObj.responseText;
+        }
+    }
+
+    var script = document.createElement('script');
+    script.src = 'http://localhost:4000/cxx?uri=(http://localhost:6666/innerhtml.text)';
+    document.body.appendChild(script);
+    
+    var clickme = document.getElementById("clickme");
+    
+    clickme.onclick = function () {
+        alert("This is responseText from CXX JSON object\n\n" + CXX.responseText + "\nCool!");
+        return false;
+    }
+    
+    setTimeout(function () {
+        // Get html 404
+        var scriptEl = document.createElement('script');
+        scriptEl.src = 'http://localhost:4000/cxx?uri=(http://localhost:6666/innerhsml.txt)&callback=callback';
+        document.body.appendChild(scriptEl);
+        
+        // Get html 200
+        var script = document.createElement('script');
+        script.src = 'http://localhost:4000/cxx?uri=(http://localhost:6666/innerhtml.text)&callback=callback';
+        document.body.appendChild(script);
+        
+        var script = document.createElement('script');
+        script.src = 'http://localhost:4000/cxx?uri=(http://localhost:6666/innerhtml.text)&callback=callback';
+        document.body.appendChild(script);
+        
+    }, 2000);
+    
+</script> 
+    
+</html>
